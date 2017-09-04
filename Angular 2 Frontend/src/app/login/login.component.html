@@ -1,0 +1,27 @@
+
+<div class="container">
+    <div class="jumbotron">
+    <h2 class="font">Welcome to our online TShirt's Shop!</h2>
+    <p>  </p>
+    <p><font class="font" size="6">SOZE Wear is here to offer: </font></p>
+    <p><font class="font" size="5"> - All kinds of TShirts you adore </font></p>
+    <p><font class="font" size="5"> - Quick and easy way to order </font></p>
+    <p><font class="font" size="5"> - Gifts and discounts </font></p>
+    <p><font class="font" size="5"> - Best product context search </font></p>
+    <!--<p><a class="btn btn-danger btn-lg" (click)="auth.login()" role="button">Go Shop!</a></p>-->
+    <p></p>
+    <p>
+        <button type="button" label="Go Shop!" class="ui-button-success" routerLink="/products" pButton icon="fa-shopping-cart" iconPos="left" ></button> 
+        <button type="button" label="Login" class="ui-button-info" pButton icon="fa-sign-in" iconPos="left" (click)="auth.login()" *ngIf="!auth.authenticated()"></button> 
+    </p>
+    <p></p>
+   
+        <h4 *ngIf="auth.authenticated()" style="color: lightseagreen">You are now logged in. Visit our shop!</h4>
+        <h4 *ngIf="!auth.authenticated()" style="color: orangered">You are not logged in, please log in.</h4>
+ 
+    </div>
+
+    <!--<button type="button" label="Login" class="ui-button-info" pButton icon="fa-sign-in" iconPos="left" (click)="auth.login()" *ngIf="!auth.authenticated()"></button> 
+    <h4 *ngIf="auth.authenticated()">You are logged in.</h4>
+    <h4 *ngIf="!auth.authenticated()">You are not logged in, please click 'Log in' button to login</h4>-->
+</div>

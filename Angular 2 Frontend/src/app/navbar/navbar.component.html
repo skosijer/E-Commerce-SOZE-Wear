@@ -1,0 +1,36 @@
+<!--<nav class="navbar navbar-toggleable-md navbar-light bg-faded">-->
+  <nav class="navbar navbar-toggleable-md  navbar-light bg-faded"> <!-- sticky-top -->
+  <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="#">SOZE Wear</a>
+
+  <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+    <ul class="navbar-nav mr-auto mt-2 mt-md-0" style="cursor: pointer">
+      <li class="nav-item active">
+        <a class="nav-link" routerLinkActive="active" routerLink="home">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLinkActive="active" routerLink="products">Products</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLinkActive="active" routerLink="login">Wishlist</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLinkActive="active" routerLink="shoppingcart">Shopping cart</a>
+      </li>
+      <!--<li class="nav-item">
+        <a class="nav-link" routerLinkActive="active" style="cursor: pointer" (click)="auth.logout()" *ngIf="auth.authenticated()">Log out</a>
+      </li>-->
+    </ul>
+    <form class="form-inline my-2 my-lg-0" style="margin-right: 50px">
+      <input class="form-control mr-sm-2" type="text" placeholder="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" style="cursor: pointer" (click)="searchProducts()" type="submit">Search</button>
+    </form>
+    <ul class="nav navbar-nav navbar-right">
+      <li class="nav-item">
+        <a class="nav-link" routerLinkActive="active" style="cursor: pointer" (click)="auth.logout()" *ngIf="auth.authenticated()"><i class="fa fa-sign-out" aria-hidden="true"></i>  Log out</a>
+      </li>
+    </ul>
+  </div>
+</nav>

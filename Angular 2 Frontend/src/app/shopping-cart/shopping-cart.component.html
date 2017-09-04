@@ -1,0 +1,132 @@
+<p-growl [value]="msgs"></p-growl>
+
+<div class="container" style="margin-top: 20px">
+  <div [hidden]="hasProducts">
+        <h4>Your shopping cart is empty. Go shop for some new <a routerLink="/products">products</a>!</h4>
+  </div>
+
+  <div [hidden]="!hasProducts">
+  <p-dataScroller [value]="products" [rows]="3" [inline]="true" [lazy]="true" scrollHeight="350px">
+      <p-header>
+          My Order
+      </p-header>
+      <template let-product pTemplate="item">
+          <div class="ui-grid ui-grid-responsive ui-fluid" style="font-size:16px;padding:20px;">
+              <div class="ui-grid-row">
+                  <div class="ui-grid-col-2" style="text-align:center"><i class="fa fa-search" (click)="changeOrderDetails(product)" style="cursor:pointer;float:left;margin-top:40px"></i><img style="width: 50%" [src]="product.image"></div>
+                  <div class="ui-grid-col-6">
+                      <div class="ui-grid ui-grid-responsive ui-fluid">
+                          <div class="ui-grid-row">
+                              <div class="ui-grid-col-3">Name: </div>
+                              <div class="ui-grid-col-10">{{product.name}}</div>
+                          </div>
+                          <div class="ui-grid-row">
+                              <div class="ui-grid-col-3">Description: </div>
+                              <div class="ui-grid-col-10">{{product.description}}</div>
+                          </div>
+                          <div class="ui-grid-row">
+                              <div class="ui-grid-col-3">Item price: </div>
+                              <div class="ui-grid-col-10" style="color: lawngreen">{{product.price_id.price_value}} $</div>
+                          </div>
+                          <!--<div class="ui-grid-row">
+                              <div class="ui-grid-col-3">Discount: </div>
+                              <div class="ui-grid-col-10" style="color: red"> {{product.price_discount}} %</div>
+                          </div>-->
+                      </div>
+                  </div>
+                  <div class="ui-grid-col-3" >
+                    <div class="ui-grid ui-grid-responsive ui-fluid">
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-5">Size: </div>
+                            <div class="ui-grid-col-7" style="margin-bottom: 4px"><p-dropdown [options]="sizes" [(ngModel)]="product.size"></p-dropdown></div>
+                        </div>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-5">Quantity: </div>
+                            <div class="ui-grid-col-4" style="margin-bottom: 4px"><p-spinner [min]="1" (click)="orderTotalCount()" [(ngModel)]="product.quantity"></p-spinner></div>
+                        </div>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-5">Order price: </div>
+                            <div class="ui-grid-col-7">{{product.quantity * product.price_id.price_value}} $</div>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="ui-grid-col-1">
+                    <div class="ui-grid ui-grid-responsive ui-fluid">
+                        <!--<div class="ui-grid-col-4">&nbsp;</div>
+                        <div class="ui-grid-col-4">&nbsp;</div>-->
+                        <div class="ui-grid-col-4" style="float: right">
+                            <button pButton (click)="removeFromShoppingCart(product.shoppingCartId)" class="ui-button-danger" type="button" icon="fa-times" iconPos="left" pTooltip="Remove item from order" tooltipPosition="top"></button>
+                        </div>
+                    </div>
+                 </div>
+              </div>
+              <hr> <!-- border-bottom:1px solid #D5D5D5 => stolen from the top div of one item -->
+          </div>
+      </template>
+  </p-dataScroller>
+
+  <div style="margin-top: 20px; margin-bottom: 20px">
+    <p-panel header="Order prices">
+        <!--<h4 style="color: lawngreen">Subtotal: {{orderSubtotal}} $</h4>-->
+        <hr>
+        <!--<h4 style="color: orangered">Discount: {{orderDiscount}} %</h4>
+        <hr>-->
+       <h4 ><b>Total: {{orderTotal}} $</b></h4>
+        <hr>
+        <!--<button pButton label="Total price?" (click)="orderTotalCount()" class="ui-button-success" type="button" iconPos="left"></button>-->
+        <button pButton label="Continue order" (click)="displayOrderDetails=true" class="ui-button-success" type="button" iconPos="left" ></button>
+    </p-panel>
+  </div>
+  <div>
+
+  <p-dialog header="Order details" [responsive]=true [resizable]=false [draggable]=false width="500" [modal]=true [(visible)]="displayOrderDetails">
+    <p-tabView>
+        <p-tabPanel header="Default" leftIcon="fa-user-circle-o">
+            We will use your profile information to make the order.
+            <p></p>
+            <ul>
+                <li>First name: Stevan</li>
+                <li>Last name: Kosijer</li>
+                <li>Address: Maksima Gorkog 2/C</li>
+                <li>Contact number: +381631701710</li>
+                <li>Email: stkosijer@gmail.com</li>
+            </ul>
+            <button pButton class="ui-button-success" type="text" icon="fa-check" label="Make order"></button>
+        </p-tabPanel>
+        <p-tabPanel header="Custom" leftIcon="fa-id-card-o">
+            <h3>Customer info</h3>
+            <form [formGroup]="formOrderDetails" class="form-horizontal">
+                <div class="form-group">
+                <div class="col-md-12">
+                    <label class="control-label">Address:</label>
+                    <input class="form-control" formControlName="address" [(ngModel)]="orderDetails.address" type="text">
+                </div>
+                </div>
+                <div class="form-group">
+                <div class="col-lg-12">
+                    <label class="control-label">Email:</label>
+                    <input class="form-control" formControlName="email" [(ngModel)]="orderDetails.email" type="text">
+                </div>
+                </div>
+                <div class="form-group">
+                <div class="col-lg-12">
+                    <label class="control-label">Phone number:</label>
+                    <input class="form-control" formControlName="phone" [(ngModel)]="orderDetails.phone" type="text">
+                </div>
+                </div>
+                <div class="form-group">
+                <label class="col-md-3 control-label"></label>
+                <div>
+                    <button pButton [disabled]="!formOrderDetails.valid" class="ui-button-success" type="text" (click)="makeOrder()" icon="fa-check" label="Make order"></button>
+                    <span></span>
+                    <button pButton class="ui-button-danger" type="text" (click)="displayOrderDetails=false" icon="fa-close" label="Cancel" style="float: right"></button>
+                </div>
+                </div>
+            </form>
+        </p-tabPanel>
+    </p-tabView>
+
+    
+  </p-dialog>
+
+</div>

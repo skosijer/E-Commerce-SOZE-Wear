@@ -1,0 +1,9 @@
+.jumbotron {
+    background: url('/assets/pictures/bart.gif') right;
+    background-repeat: no-repeat;
+
+    opacity: 0.8;
+    /*height: 500px; same height as jumbotron */
+    color: green;
+    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+}

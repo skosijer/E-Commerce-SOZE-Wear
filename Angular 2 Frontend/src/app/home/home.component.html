@@ -1,0 +1,136 @@
+<p-growl [value]="msgs" ></p-growl>
+<p-confirmDialog width="425"></p-confirmDialog>
+
+<div class="container" style="margin-top: 20px">
+    <h3>Admin dashboard</h3>
+
+    <button pButton label="Add category" (click)="addNewCategory()" class="ui-button-info" type="button" icon="fa fa-sitemap" iconPos="left"></button>
+    <button pButton label="Add product" (click)="addNewProduct()" class="ui-button-info" type="button" icon="fa fa-plus-square" iconPos="left"></button>
+    <button pButton label="Add price" class="ui-button-info" type="button" icon="fa fa-money" iconPos="left"></button>
+    <button pButton label="Add pricelist" class="ui-button-info" type="button" icon="fa fa-th-list" iconPos="left"></button>
+
+    <div  style="margin-top: 20px">
+          <p-dataTable [value]="allProducts" [responsive]="true" [rows]="5" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[5,10,20]">
+                  <p-header>Products</p-header>
+                  <p-column *ngFor="let col of allProductsCols" [field]="col.field" [filter]="true" filterPlaceholder="Search" [header]="col.header"></p-column>
+                  <p-column styleClass="col-button">
+                      <template pTemplate="header">
+                          <header>Update</header>
+                      </template>
+                      <template let-product="rowData" pTemplate="body">
+                          <button type="button" label="Update" class="ui-button-success" (click)="updateProduct(product)" pButton style="float:center; width: 100%;" icon="fa-edit" iconPos="left"></button>
+                      </template>
+                  </p-column>
+                  <p-column styleClass="col-button">
+                      <template pTemplate="header">
+                          <header>Delete</header>
+                      </template>
+                      <template let-product="rowData" pTemplate="body">
+                          <button type="button" label="Delete" class="ui-button-danger" (click)="deleteProduct(product)" pButton style="float:center; width: 100%;" icon="fa-times" iconPos="left"></button>
+                      </template>
+                  </p-column>
+              </p-dataTable>
+    </div>
+
+    <div  style="margin-top: 20px">
+          <p-dataTable [value]="allCategories" [responsive]="true" [rows]="5" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[5,10,20]">
+                  <p-header>Categories</p-header>
+                  <p-column *ngFor="let col of allCategoriesCols" [field]="col.field" [filter]="true" filterPlaceholder="Search" [header]="col.header"></p-column>
+                  <p-column styleClass="col-button">
+                      <template pTemplate="header">
+                          <header>Update</header>
+                      </template>
+                      <template let-category="rowData" pTemplate="body">
+                          <button type="button" label="Update" class="ui-button-success" (click)="updateCategory(category)" pButton style="float:center; width: 100%;" icon="fa-edit" iconPos="left"></button>
+                      </template>
+                  </p-column>
+                  <p-column styleClass="col-button">
+                      <template pTemplate="header">
+                          <header>Delete</header>
+                      </template>
+                      <template let-category="rowData" pTemplate="body">
+                          <button type="button" label="Delete" class="ui-button-danger" (click)="deleteCategory(category)" pButton style="float:center; width: 100%;" icon="fa-times" iconPos="left"></button>
+                      </template>
+                  </p-column>
+              </p-dataTable>
+    </div>
+
+  <p-dialog header="Category" [responsive]=true [resizable]=false [draggable]=false width="500" [modal]=true [(visible)]="displayAddCategory">
+    <h3>Category info</h3>
+      <form [formGroup]="formAddCategory" class="form-horizontal">
+        <div class="form-group">
+          <div class="col-md-12">
+            <label class="control-label">Name:</label>
+            <input class="form-control" formControlName="name" [(ngModel)]="category.name" type="text">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-lg-12">
+            <label class="control-label">Description:</label>
+            <input class="form-control" formControlName="description" [(ngModel)]="category.description" type="text">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-md-3 control-label"></label>
+          <div>
+            <button pButton [disabled]="!formAddCategory.valid" class="ui-button-success" type="text" (click)="addCategory()" icon="fa-check" label="Save"></button>
+            <span></span>
+            <button pButton class="ui-button-danger" type="text" (click)="displayAddCategory=false" icon="fa-close" label="Cancel" style="float: right"></button>
+          </div>
+        </div>
+      </form>
+  </p-dialog>
+
+  <p-dialog header="Product" [responsive]=true [resizable]=false [draggable]=false width="500" [modal]=true [(visible)]="displayAddProduct">
+    <h3>Product info</h3>
+      <form [formGroup]="formAddProduct" class="form-horizontal">
+        <div class="form-group">
+          <div class="col-md-12">
+            <label class="control-label">Name:</label>
+            <input class="form-control" formControlName="name" [(ngModel)]="product.name" type="text">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-lg-12">
+            <label class="control-label">Description:</label>
+            <input class="form-control" formControlName="description" [(ngModel)]="product.description" type="text">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-lg-12">
+            <label class="control-label">Category:</label>
+            <p><p-dropdown [style]="{'width':'200px'}" formControlName="category" [options]="optionCategories" [(ngModel)]="product.category"></p-dropdown> </p>
+          </div>
+        </div>
+         <div class="form-group">
+          <div class="col-lg-12">
+            <label class="control-label">Price:</label>
+            <p><p-dropdown [style]="{'width':'200px'}" formControlName="price" [options]="optionPrices" [(ngModel)]="product.price"></p-dropdown> </p>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-lg-12">
+            <p-fileUpload name="demo[]" url="./upload.php" (onUpload)="onUpload($event)" 
+                multiple="multiple" accept="image/*" maxFileSize="1000000">
+                <template pTemplate type="content">
+                    <ul *ngIf="uploadedFiles.length">
+                        <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
+                    </ul>
+                </template>        
+            </p-fileUpload>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-md-3 control-label"></label>
+          <div>
+            <button pButton [disabled]="!formAddProduct.valid" class="ui-button-success" type="text" (click)="addProduct()" icon="fa-check" label="Save"></button>
+            <span></span>
+            <button pButton class="ui-button-danger" type="text" (click)="displayAddProduct=false" icon="fa-close" label="Cancel" style="float: right"></button>
+          </div>
+        </div>
+      </form>
+  </p-dialog>
+
+</div>
+
+

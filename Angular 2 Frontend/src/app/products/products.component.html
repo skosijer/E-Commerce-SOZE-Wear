@@ -1,0 +1,187 @@
+<!--<p-dataGrid [value]="products" [paginator]="true" [rows]="9" [lazy]="true" (onLazyLoad)="loadProducts($event)" [totalRecords]="products.totalElements">
+    <ng-template let-product pTemplate="item">
+        <div class="ui-g-12 ui-md-3">
+            WHATEVER MAN
+        </div>
+    </ng-template>
+</p-dataGrid>-->
+
+<p-dialog header="Search and filter" [responsive]=true [resizable]=false [draggable]=false width="700" [modal]=true [(visible)]="displaySearchFilter">
+    <p-tabView>
+            <p-tabPanel header="Phrases">
+                <p>Choose fields for searching phrases: </p>
+                <div class="ui-g" style="margin-bottom: 10px">
+                    <div class="ui-g-12"><p-checkbox name="group1" value="Name" [(ngModel)]="selectedSearchPhrases"></p-checkbox>Name</div>
+                    <div class="ui-g-12"><p-checkbox name="group1" value="Description" [(ngModel)]="selectedSearchPhrases"></p-checkbox>Description</div>
+                    <div class="ui-g-12"><p-checkbox name="group1" value="Category" [(ngModel)]="selectedSearchPhrases"></p-checkbox>Category</div>
+                </div>
+
+                Selected fields: <span *ngFor="let sel of selectedSearchPhrases" style="margin-right:10px">{{sel}}</span>
+                <i class="fa fa-question" style="float: right; color: green; font-size:36px;" pTooltip="TIP: select description field and type 'I love football' in search" tooltipPosition="left"></i>
+                <div style="margin-top: 10px">
+                    <form [formGroup]="firstSearchForm" class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <input class="form-control" formControlName="text" [(ngModel)]="firstSearch.text" placeholder="Type any phrase you want" type="text">
+                            </div>
+                        </div>
+                        <button pButton class="ui-button-success" type="text" icon="fa-search" [disabled]="!firstSearchForm.valid" (click)="makeFirstSearch()" label="Search" style="float: right"></button>
+                        <button pButton class="ui-button-danger" type="text" icon="fa-close" (click)="displaySearchFilter=false" label="Cancel" style="float: left"></button>
+                    </form>
+                </div>
+
+            </p-tabPanel>
+            <p-tabPanel header="Fuzzy">
+                 <!--<p>Choose one field for wildcard search: </p>
+                <div class="ui-g" style="margin-bottom: 10px">
+                    <div class="ui-g-12"><p-radioButton name="group2" value="Name" [(ngModel)]="selectedSearchWildcard"></p-radioButton>Name</div>
+                    <div class="ui-g-12"><p-radioButton name="group2" value="Description" [(ngModel)]="selectedSearchWildcard"></p-radioButton>Description</div>
+                    <div class="ui-g-12"><p-radioButton name="group2" value="Category" [(ngModel)]="selectedSearchWildcard"></p-radioButton>Category</div>
+                </div>-->
+
+                <p>Place where mistakes make a good choice. </p>
+                <p>Our website is really good at correcting your mistakes. Try it!</p>
+                <div></div>
+                <div style="margin-top: 10px">
+                    <form [formGroup]="secondSearchForm" class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <input class="form-control" formControlName="text" [(ngModel)]="secondSearch.text" placeholder="TIP: try searching for 'sebin festivel'" type="text">
+                            </div>
+                        </div>
+                        <button pButton class="ui-button-success" type="text" icon="fa-search" [disabled]="!secondSearchForm.valid" (click)="makeSecondSearch()" label="Search" style="float: right"></button>
+                        <button pButton class="ui-button-danger" type="text" icon="fa-close" (click)="displaySearchFilter=false" label="Cancel" style="float: left"></button>
+                    </form>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Simple Query">
+                <p>Here you can make your own query, really simple.</p>
+                
+                <p>The query supports the following special characters: </p>
+
+
+                <table style="width:100%">
+                <tr>
+                    <th></th>
+                    <th>Character</th>
+                    <th>Operation</th>
+                </tr>
+                 <tr>
+                    <td><ul><li></li></ul></td>
+                    <td><b style="color: orangered">  +  </b> </td>
+                    <td>signifies AND operation</td>
+                 </tr>
+                  <tr>
+                    <td><ul><li></li></ul></td>
+                    <td><b style="color: orangered">  |  </b> </td>
+                    <td>signifies OR operation</td>
+                 </tr>
+                  <tr>
+                    <td><ul><li></li></ul></td>
+                    <td><b style="color: orangered">  -  </b> </td>
+                    <td>negates a single token</td>
+                 </tr>
+                 <tr>
+                    <td><ul><li></li></ul></td>
+                    <td><b style="color: orangered">  "  </b> </td>
+                    <td>wraps a number of tokens to signify a phrase</td>
+                 </tr>
+                 <tr>
+                    <td><ul><li></li></ul></td>
+                    <td><b style="color: orangered">  *  </b> </td>
+                    <td>at the end of a term signifies a prefix query</td>
+                 </tr>
+                 <tr>
+                    <td><ul><li></li></ul></td>
+                    <td><b style="color: orangered">  ( and )   </b> </td>
+                    <td>signify precedence</td>
+                 </tr>
+                 <tr>
+                    <td><ul><li></li></ul></td>
+                    <td><b style="color: orangered">  ~N  </b> </td>
+                    <td>after a word signifies edit distance (fuzziness)</td>
+                 </tr>
+                 <tr>
+                    <td><ul><li></li></ul></td>
+                    <td><b style="color: orangered">  ~N  </b> </td>
+                    <td>after a phrase signifies slop amount</td>
+                 </tr>
+                </table>
+ 
+                <br/>
+<p>In order to search for any of these special characters, they will need to be escaped with \.</p>
+    
+                <div style="margin-top: 10px">
+                    <form [formGroup]="thirdSearchForm" class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <input class="form-control" formControlName="text" [(ngModel)]="thirdSearch.text" placeholder="TIP: Try searching for 'forever+special'" type="text">
+                            </div>
+                        </div>
+                        <button pButton class="ui-button-success" type="text" icon="fa-search" [disabled]="!thirdSearchForm.valid" (click)="makeThirdSearch()" label="Search" style="float: right"></button>
+                        <button pButton class="ui-button-danger" type="text" icon="fa-close" (click)="displaySearchFilter=false" label="Cancel" style="float: left"></button>
+                    </form>
+                </div>   
+            </p-tabPanel>
+
+            <!--<p-tabPanel header="Range">
+                <p>Select the price range you want to search</p>
+                
+                <h4>Range: {{rangeValues[0] + ' - ' + rangeValues[1]}}</h4>
+                <div style="margin-top: 10px">
+                  
+                            <div class="col-md-12">
+                                <p-slider [min]="0" [(ngModel)]="rangeValues" [style]="{'width':'200px'}" [range]="true"></p-slider>
+                            </div>
+                        <button pButton class="ui-button-success" type="text" icon="fa-search"  (click)="makeThirdSearch()" label="Search" style="float: right"></button>
+                        <button pButton class="ui-button-danger" type="text" icon="fa-close" (click)="displaySearchFilter=false" label="Cancel" style="float: left"></button>
+                
+                </div>   
+            </p-tabPanel>-->
+    </p-tabView>
+</p-dialog>
+
+<p-growl [value]="msgs" ></p-growl>
+
+<div style="margin: 20px;">
+    <p-toolbar>
+        <div class="ui-toolbar-group-left">
+            <button class="btn btn-outline-secondary" style="cursor: pointer;" (click)="showHideCategories()">{{showCategoriesTitle}}</button>
+
+            <button class="btn btn-outline-info" style="cursor: pointer;" (click)="displaySearchFilter=true">Search and filter</button>
+        </div>
+    </p-toolbar>
+</div>
+
+<div style="margin: 20px">
+    
+    <div [hidden]="!showCategories" style="float: left">
+        <p-menu [model]="categories"></p-menu>
+    </div>
+    
+    <p-dataGrid [value]="products" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[6,12,24]" [rows]="12">
+        <p-header>
+            {{productsTitle}}
+        </p-header>
+        <template let-product pTemplate="item">
+            <div style="padding:3px" class="ui-g-2">
+                <p-panel [header]="product.name" [style]="{'text-align':'center'}">
+                    <!--<img src="showcase/resources/demo/images/car/{{car.brand}}.gif">-->
+                    <img [src]="product.image" (error)="product.image = '/pictures/tshirt-template.png'" style="width:100%;">
+                    <div class="product-detail">
+                        Category: <b>{{product.category.name}}</b><br/>
+                        <!--<p>Description: 
+                            <b *ngIf="product.description.length >= 18" pTooltip="{{product.description}}" tooltipPosition="bottom">{{product.description.substring(0, 18)}}...</b>
+                            <b *ngIf="product.description.length < 18">{{product.description}} </b>
+                        </p>  -->
+                        <p>Price: <b style="color: lawngreen">{{product.price_id.price_value}} $</b></p>
+                    </div>
+                    <hr class="ui-widget-content" style="border-top:0">
+                    <i class="fa fa-search" style="cursor:pointer" pTooltip="Show product details" tooltipPosition="top"></i>
+                    <i class="fa fa-shopping-cart" (click)="addToShoppingCart(product)" style="cursor:pointer" pTooltip="Add to shopping cart" tooltipPosition="top"></i> 
+                    <i class="fa fa-heart" style="cursor:pointer" pTooltip="Add to wishlist" tooltipPosition="top"></i> 
+                </p-panel>
+            </div>
+        </template>
+    </p-dataGrid>
+</div>
